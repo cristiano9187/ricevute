@@ -182,54 +182,23 @@
     </div>
 
     <script>
-        // Le Service Worker (sw.js) sous forme de chaîne de caractères
-        const swScriptContent = `
-            const CACHE_NAME = 'receipt-generator-cache-v1';
-            const urlsToCache = [
-                '/',
-                'https://cdn.tailwindcss.com',
-                'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap'
-            ];
-
-            self.addEventListener('install', function(event) {
-                event.waitUntil(
-                    caches.open(CACHE_NAME)
-                        .then(function(cache) {
-                            console.log('Service Worker: Cache ouvert');
-                            return cache.addAll(urlsToCache);
-                        })
-                        .then(() => self.skipWaiting())
-                );
+        // Le Service Worker (sw.js)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js', { scope: './' }).then(function(registration) {
+                    console.log('ServiceWorker enregistré avec succès. Fonctionnalité hors ligne activée.');
+                    document.getElementById('offline-status').textContent = 'Mode hors ligne : Actif';
+                    document.getElementById('offline-status').classList.add('text-green-600');
+                }).catch(function(err) {
+                    console.error('Échec de l\'enregistrement du ServiceWorker:', err);
+                    document.getElementById('offline-status').textContent = 'Mode hors ligne : Inactif';
+                    document.getElementById('offline-status').classList.add('text-red-600');
+                });
             });
-
-            self.addEventListener('activate', function(event) {
-                event.waitUntil(
-                    caches.keys().then(cacheNames => {
-                        return Promise.all(
-                            cacheNames.map(cacheName => {
-                                if (cacheName !== CACHE_NAME) {
-                                    console.log('Service Worker: Suppression du vieux cache', cacheName);
-                                    return caches.delete(cacheName);
-                                }
-                            })
-                        );
-                    })
-                );
-                self.clients.claim();
-            });
-
-            self.addEventListener('fetch', function(event) {
-                event.respondWith(
-                    caches.match(event.request)
-                        .then(function(response) {
-                            if (response) {
-                                return response;
-                            }
-                            return fetch(event.request);
-                        })
-                );
-            });
-        `;
+        } else {
+            document.getElementById('offline-status').textContent = 'Service Workers non supportés par votre navigateur.';
+            document.getElementById('offline-status').classList.add('text-red-600');
+        }
         
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
