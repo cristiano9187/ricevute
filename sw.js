@@ -1,29 +1,36 @@
 const CACHE_NAME = 'receipt-generator-cache-v1';
+
 const urlsToCache = [
-    './', // Ceci correspond au dossier actuel sur GitHub
-    './programme_recu_rapide.html', // Nom du fichier mis à jour ici
+    './', // Cache la racine du dossier pour l'accès
+    './programme_recu_rapide.html', // Le nom de votre fichier HTML
+    './sw.js', // Le Service Worker lui-même
     'https://cdn.tailwindcss.com',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap'
 ];
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', (event) => {
+    console.log('Service Worker: Événement d\'installation...');
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(function(cache) {
-                console.log('Service Worker: Cache ouvert');
+            .then((cache) => {
+                console.log('Service Worker: Cache ouvert, ajout des URLs...');
                 return cache.addAll(urlsToCache);
             })
             .then(() => self.skipWaiting())
+            .catch((error) => {
+                console.error('Service Worker: Échec de la mise en cache pendant l\'installation', error);
+            })
     );
 });
 
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', (event) => {
+    console.log('Service Worker: Événement d\'activation...');
     event.waitUntil(
-        caches.keys().then(cacheNames => {
+        caches.keys().then((cacheNames) => {
             return Promise.all(
-                cacheNames.map(cacheName => {
+                cacheNames.map((cacheName) => {
                     if (cacheName !== CACHE_NAME) {
-                        console.log('Service Worker: Suppression du vieux cache', cacheName);
+                        console.log('Service Worker: Suppression du vieux cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
@@ -33,14 +40,19 @@ self.addEventListener('activate', function(event) {
     self.clients.claim();
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
-            .then(function(response) {
+            .then((response) => {
                 if (response) {
+                    console.log('Service Worker: Ressource trouvée dans le cache:', event.request.url);
                     return response;
                 }
+                console.log('Service Worker: Ressource non trouvée, récupération depuis le réseau:', event.request.url);
                 return fetch(event.request);
+            })
+            .catch((error) => {
+                console.error('Service Worker: Échec de la requête:', error);
             })
     );
 });
