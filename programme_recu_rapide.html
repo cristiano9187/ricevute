@@ -182,32 +182,10 @@
     </div>
 
     <script>
-        // Le Service Worker (sw.js)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js', { scope: './' }).then(function(registration) {
-                    console.log('ServiceWorker enregistré avec succès. Fonctionnalité hors ligne activée.');
-                    document.getElementById('offline-status').textContent = 'Mode hors ligne : Actif';
-                    document.getElementById('offline-status').classList.add('text-green-600');
-                }).catch(function(err) {
-                    console.error('Échec de l\'enregistrement du ServiceWorker:', err);
-                    document.getElementById('offline-status').textContent = 'Mode hors ligne : Inactif';
-                    document.getElementById('offline-status').classList.add('text-red-600');
-                });
-            });
-        } else {
-            document.getElementById('offline-status').textContent = 'Service Workers non supportés par votre navigateur.';
-            document.getElementById('offline-status').classList.add('text-red-600');
-        }
-        
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                // Créer un Blob à partir du contenu du script Service Worker
-                const swBlob = new Blob([swScriptContent], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(swBlob);
-
-                // Enregistrer le Service Worker à partir de l'URL du Blob
-                navigator.serviceWorker.register(swUrl, { scope: './' }).then(function(registration) {
+                // Le chemin d'accès a été corrigé pour pointer vers le bon dossier sur GitHub
+                navigator.serviceWorker.register('/ricevute-yamehome/sw.js', { scope: '/ricevute-yamehome/' }).then(function(registration) {
                     console.log('ServiceWorker enregistré avec succès. Fonctionnalité hors ligne activée.');
                     document.getElementById('offline-status').textContent = 'Mode hors ligne : Actif';
                     document.getElementById('offline-status').classList.add('text-green-600');
@@ -656,3 +634,4 @@
 
 </body>
 </html>
+
