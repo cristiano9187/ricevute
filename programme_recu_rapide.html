@@ -185,7 +185,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 // Le chemin d'accès a été corrigé pour pointer vers le bon dossier sur GitHub
-                navigator.serviceWorker.register('/ricevute-yamehome/sw.js', { scope: '/ricevute-yamehome/' }).then(function(registration) {
+                navigator.serviceWorker.register('/ricevute/sw.js', { scope: '/ricevute/' }).then(function(registration) {
                     console.log('ServiceWorker enregistré avec succès. Fonctionnalité hors ligne activée.');
                     document.getElementById('offline-status').textContent = 'Mode hors ligne : Actif';
                     document.getElementById('offline-status').classList.add('text-green-600');
@@ -634,4 +634,3 @@
 
 </body>
 </html>
-
