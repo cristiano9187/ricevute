@@ -1,7 +1,7 @@
 const CACHE_NAME = 'receipt-generator-cache-v1';
 const urlsToCache = [
-    '/',
-    '/programme_recu_rapide.html', // Assurez-vous que le nom du fichier est correct
+    './', // Ceci correspond au dossier actuel sur GitHub
+    './programme_recu_rapide.html', // Nom du fichier mis à jour ici
     'https://cdn.tailwindcss.com',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap'
 ];
