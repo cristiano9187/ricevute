@@ -4,7 +4,7 @@ const urlsToCache = [
     './', // Cache la racine du dossier pour l'accès
     './programme_recu_rapide.html', // Le nom de votre fichier HTML
     './sw.js', // Le Service Worker lui-même
-    'https://cdn.tailwindcss.com',
+    // On retire le CDN de Tailwind, car il est désormais intégré dans le HTML
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap'
 ];
 
